@@ -9,12 +9,13 @@ class Crud extends CI_Controller {
 		$this->load->model('crud_model');
 		$this->idTable = "idPessoa";
 		$this->table = "pessoa";
+		$this->campo = "idPessoa, nome, email";
 		$this->order = "asc";
-		$this->camp = "nome";
+		$this->camp = "nome"; //array("idPessoa", "nome");
 	}
 
 	public function index(){
-		$dados['pessoas'] = $this->crud_model->listAll($this->table, $this->camp, $this->order);
+		$dados['pessoas'] = $this->crud_model->listAll($this->table, $this->camp, $this->order, $this->campo);
 		$this->load->view('home', $dados);
 	}
 

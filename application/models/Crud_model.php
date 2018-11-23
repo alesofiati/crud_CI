@@ -25,8 +25,8 @@ class Crud_model extends CI_Model{
 		}
 	}
 
-	public function listAll($tabela, $camp, $order){
-		$this->db->select('*')->from($tabela);
+	public function listAll($tabela, $camp, $order, $campo){
+		$this->db->select($campo)->from($tabela);
 		$this->db->order_by($camp, $order);
 		$query = $this->db->get()->result();
 		if ($query) {
