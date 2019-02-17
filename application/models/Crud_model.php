@@ -36,8 +36,8 @@ class Crud_model extends CI_Model{
 		}
 	}
 	// recupera o registro de alguma tabela e retorna para a tela, para ser editado 
-	public function getOne($tabela, $idTable, $id){
-		$this->db->select('*')->from($tabela);
+	public function getOne($tabela, $idTable, $id, $campo){
+		$this->db->select($campo)->from($tabela);
 		$this->db->where($idTable, $id);
 		$query = $this->db->get()->row_array();
 		return $query;

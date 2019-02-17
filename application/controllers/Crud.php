@@ -42,7 +42,7 @@ class Crud extends CI_Controller {
 
 	public function editPeople($id){
 		$id = $this->uri->segment(2);
-		$dados['pessoa'] = $this->crud_model->getOne($this->table, $this->idTable, $id);
+		$dados['pessoa'] = $this->crud_model->getOne($this->table, $this->idTable, $id, $this->campo);
 		$this->load->view('editarPessoa', $dados);
 	}
 	
