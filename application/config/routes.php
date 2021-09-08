@@ -8,4 +8,5 @@ $route['translate_uri_dashes'] = FALSE;
 $route['addPessoa'] = 'crud/newPeople';
 $route['editPessoa/(:num)'] = 'crud/editPeople/$1';
 $route['update'] = 'crud/updatePessoa';
+$route['pessoas/endereco'] = 'crud/pessoaJoin';
 $route['delete/(:num)'] = 'crud/deletePessoa/$1';

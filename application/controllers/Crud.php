@@ -6,16 +6,14 @@ class Crud extends CI_Controller {
 	// Construção da classe pai
 	public function __construct(){	
 		parent:: __construct();
-		$this->load->model('crud_model');
+		$this->load->model('crud_model', 'crud');
 		$this->idTable = "idPessoa";
 		$this->table = "pessoa";
 		$this->campo = "idPessoa, nome, email";
-		$this->order = "asc";
-		$this->camp = "nome"; //array("idPessoa", "nome");
 	}
 
 	public function index(){
-		$dados['pessoas'] = $this->crud_model->listAll($this->table, $this->camp, $this->order, $this->campo);
+		$dados['pessoas'] = $this->crud->all('pessoa');
 		$this->load->view('home', $dados);
 	}
 
@@ -30,7 +28,7 @@ class Crud extends CI_Controller {
 				"nome" => $this->input->post('nome'),
 				"email" => $this->input->post('email')
 			);
-			if ($this->crud_model->store($this->table, $this->idTable, $this->input->post('id'), $data)) {
+			if ($this->crud->store('pessoa', $this->idTable, $this->input->post('id'), $data)) {
 				$this->session->set_flashdata("success", "Cadastro realizado com sucesso.");
 				redirect(base_url('/'));
 			}else{
@@ -41,8 +39,7 @@ class Crud extends CI_Controller {
 	}//funtion
 
 	public function editPeople($id){
-		$id = $this->uri->segment(2);
-		$dados['pessoa'] = $this->crud_model->getOne($this->table, $this->idTable, $id, $this->campo);
+		$dados['pessoa'] = $this->crud->find($this->table, $this->idTable, $id, $this->campo);
 		$this->load->view('editarPessoa', $dados);
 	}
 	
@@ -52,7 +49,7 @@ class Crud extends CI_Controller {
 			"nome"=> $this->input->post('nome'),
 			"email"=> $this->input->post('email')
 		);
-		if ($this->crud_model->store($this->table, $this->idTable, $id, $dados)) {
+		if ($this->crud->store($this->table, $this->idTable, $id, $dados)) {
 			$this->session->set_flashdata("success", "Pessoa alterada com sucesso.");
 			redirect(base_url('/'));
 		}else{
@@ -61,9 +58,21 @@ class Crud extends CI_Controller {
 		}
 	}	
 
+	public function pessoaJoin(){
+		echo "<pre>";
+		print_r($this->crud->join('pessoa as p', 'p.nome, e.rua', [
+				[
+					'table' => 'endereco as e',
+					'condition' => 'e.pessoa_id=p.idPessoa',
+					'type_join' => 'inner'
+				]
+			]
+		));
+	}
+
 	public function deletePessoa($id){
 		$id = $this->uri->segment('2');
-		if ($this->crud_model->delete($this->table, $this->idTable, $id)) {
+		if ($this->crud->destroy($this->table, $this->idTable, $id)) {
 			$this->session->set_flashdata("success", "Pessoa apagada com sucesso.");
 			redirect('/');
 		}else{
