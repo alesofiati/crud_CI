@@ -46,6 +46,23 @@ $(document).ready(function(){
 		}
 	}
 
+	const defaultReturnAjax = (response) => {
+		switch (response.type) {
+			case "success":
+				showMessageRedirect('Atenção', response.message)
+				return
+			break
+			case "error":
+				showMessageRedirect('Atenção', response.message, 'warning')
+				return
+			break
+			case "form_error":
+				validationAjax(response)
+				return
+			break
+		}
+	}
+
 	const formAjax = () =>{
 		$("#form-ajax").on("submit", function(e){
 			e.preventDefault()
@@ -56,18 +73,8 @@ $(document).ready(function(){
 				'url': formEl.attr('action'),
 				data,
 				dataType:'json'
-			}).done((data) =>{
-				if(data.type === "success"){
-					showMessageRedirect('Atenção', data.message)
-					return
-				}
-				if(data.type === "error"){
-					showMessageRedirect('Atenção', data.message, 'warning')
-					return
-				}
-				if(data.type === "form_error"){
-					validationAjax(data)
-				}
+			}).done((response) =>{
+				defaultReturnAjax(response)
 			})
 		})
 	}
@@ -86,7 +93,7 @@ $(document).ready(function(){
 		e.preventDefault()
 		Swal.fire({
 			title: 'Deseja remover esse registro?',
-			text: "Esta ação não é reversivo!",
+			text: "Esta ação não é reversiva!",
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#d33',
@@ -97,17 +104,8 @@ $(document).ready(function(){
 				$.ajax({
 					type:"DELETE",
 					url:$(this).attr('href'),
-					success: function(data){
-						switch (data.type) {
-							case "success":
-								showMessageRedirect('Atenção', data.message)
-								return
-								break
-							case "error":
-								showMessageRedirect('Atenção', data.message, 'warning')
-								return
-								break
-						}
+					success: function(response){
+						defaultReturnAjax(response)
 					}
 				})
 			}
@@ -127,17 +125,8 @@ $(document).ready(function(){
 				$.ajax({
 					type:"DELETE",
 					url:$(this).attr('href'),
-					success: function(data){
-						switch (data.type) {
-							case "success":
-								showMessageRedirect('Atenção', data.message)
-								return
-								break
-							case "error":
-								showMessageRedirect('Atenção', data.message, 'warning')
-								return
-								break
-						}
+					success: function(response){
+						defaultReturnAjax(response)
 					}
 				})
 			}
